@@ -1,20 +1,21 @@
+use libc::{c_int, c_void};
 use rand::Rng;
-use std::{collections::HashMap, ffi::c_void};
+use std::{collections::HashMap};
 
 // Dummy nested structs
 
 #[derive(Debug)]
 #[repr(C)] // ensure C layout
 pub struct Foo {
-    pub x: i32,
+    pub x: c_int,
     pub y: Bar,
 }
 
 #[derive(Debug)]
 #[repr(C)]
 pub struct Bar {
-    pub x: i32,
-    pub y: i32,
+    pub x: c_int,
+    pub y: c_int,
 }
 
 /// Creates a random hashmap and returns a pointer to it.
