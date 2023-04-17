@@ -7,3 +7,10 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.4"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+lto = true          # Link Time Optimization, reduces overall size
+panic = 'abort'
