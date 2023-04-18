@@ -1,17 +1,20 @@
 use libc::{c_int, c_void};
 use rand::Rng;
-use std::{collections::HashMap};
+use serde::Serialize;
+use std::collections::HashMap;
 
 // Dummy nested structs
+const VALUE_LIMIT: i32 = 100;
 
-#[derive(Debug)]
+// Clone is necessary here, somehow without it, the struct passed to C will be messed up
+#[derive(Serialize, Debug, Clone)]
 #[repr(C)] // ensure C layout
 pub struct Foo {
     pub x: c_int,
     pub y: Bar,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug, Clone)]
 #[repr(C)]
 pub struct Bar {
     pub x: c_int,
@@ -24,16 +27,13 @@ pub extern "C" fn build_hashmap() -> *const c_void {
     let mut hashmap = HashMap::new();
     let mut rng = rand::thread_rng();
     for _ in 0..10 {
-        let key = rng.gen_range(0..100);
-        let x = rng.gen_range(0..100);
-        let bar_x = rng.gen_range(0..100);
-        let bar_y = rng.gen_range(0..100);
+        let key = rng.gen_range(0..VALUE_LIMIT);
+        let x = rng.gen_range(0..VALUE_LIMIT);
+        let bar_x = rng.gen_range(0..VALUE_LIMIT);
+        let bar_y = rng.gen_range(0..VALUE_LIMIT);
         let value = Foo {
             x,
-            y: Bar {
-                x: bar_x,
-                y: bar_y,
-            },
+            y: Bar { x: bar_x, y: bar_y },
         };
         hashmap.insert(key, value);
     }
@@ -51,13 +51,18 @@ pub extern "C" fn get_hashmap_value(pointer: *mut c_void, key: i32) -> *const c_
     let hashmap = unsafe { &*(pointer as *mut HashMap<i32, Foo>) };
     match hashmap.get(&key) {
         Some(value) => {
-            let pointer = Box::into_raw(Box::new(value.clone())) as *const c_void;
+            let value = value.clone();
+            println!("Rust: {:?}", value);
+            // use bincode to convert to bytes
+            let pointer = Box::into_raw(Box::new(value)) as *const c_void;
             println!("Rust: value pointer: {:p}", pointer);
+            // let value_bytes = bincode::serialize(&value).unwrap();
+            // println!("Rust: bytes: {:?}", value_bytes);
             pointer
         }
         None => {
             println!("Rust: key {} not found", key);
-            std::ptr::null_mut()
+            std::ptr::null()
         }
     }
 }
@@ -82,6 +87,8 @@ pub extern "C" fn free_foo(pointer: *const c_void) {
         // make sure the Foo type is the same as the one used in get_hashmap_value
         let foo = Box::from_raw(pointer as *mut Foo);
         println!("Rust: {:?}", foo);
+        let foo_bytes = bincode::serialize(&foo).unwrap();
+        println!("Rust: bytes: {:?}", foo_bytes);
     }
     println!("Rust: freed");
 }
