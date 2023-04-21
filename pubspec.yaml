@@ -10,9 +10,22 @@ dev_dependencies:
 
 ffigen:
   output: 'hashmap_bindings.dart'
+  name: 'RustHashmap'
+  # ffigen adds additional things in the stdint header, but we don't need them.
+  exclude-all-by-default: true
+  functions:
+    include:
+      - .*
+    exclude:
+      - _.*
+  structs:
+    include:
+      - .*
+    exclude:
+      - _.*
   headers:
     entry-points:
-      - 'hashmap.h'
+      - 'pointer/hashmap.h'
 
 environment:
   sdk: '>=2.18.0 <3.0.0'

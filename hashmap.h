@@ -1,6 +1,6 @@
 /**
  * This header is written manually
-*/
+ */
 #ifndef _HASHMAP_RUST_
 #define _HASHMAP_RUST_
 

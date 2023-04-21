@@ -13,6 +13,10 @@ dart:
 
 all: lib c dart
 
+header:
+	cd pointer && cbindgen --config cbindgen.toml --crate pointer --output hashmap.h
+	dart run ffigen
+
 clean:
 	cd pointer && cargo clean
 	del *.dll *.exe

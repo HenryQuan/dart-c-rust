@@ -31,7 +31,8 @@ int main(int argc, char* argv[]) {
             }
             printf("]\n");
             printf("C: value pointer: %p\n", foo);
-            printf("C: Foo: { x: %d, y: Bar { x: %d, y: %d } }\n", foo->x, foo->y.x, foo->y.y);
+            printf("C: Foo: { x: %d, y: Bar { x: %d, y: %d } }\n", foo->x,
+                   foo->y.x, foo->y.y);
             free_foo(foo);
             printf("C: value freed\n");
         }
