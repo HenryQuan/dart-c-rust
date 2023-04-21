@@ -46,9 +46,9 @@ pub extern "C" fn build_hashmap() -> *const c_void {
 /// Gets a value from the hashmap.
 /// Returns null if the key is not found, or the pointer to the value.
 #[no_mangle]
-pub extern "C" fn get_hashmap_value(pointer: *mut c_void, key: i32) -> *const c_void {
+pub extern "C" fn get_hashmap_value(pointer: *const c_void, key: i32) -> *const c_void {
     println!("Rust: hashmap pointer: {:p}", pointer);
-    let hashmap = unsafe { &*(pointer as *mut HashMap<i32, Foo>) };
+    let hashmap = unsafe { &*(pointer as *const HashMap<i32, Foo>) };
     match hashmap.get(&key) {
         Some(value) => {
             let value = value.clone();

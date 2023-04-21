@@ -1,2 +1,5 @@
 *.dll
 *.exe
+
+# dart
+.dart_tool/

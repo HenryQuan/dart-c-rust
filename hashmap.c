@@ -1,26 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef void* Hashmap;
-extern Hashmap build_hashmap();
-extern void* get_hashmap_value(Hashmap, int);
-extern void free_hashmap(Hashmap);
-extern void free_foo(void*);
-
-typedef struct Bar {
-    int x;
-    int y;
-} Bar;
-
-typedef struct Foo {
-    int x;
-    Bar y;
-} Foo;
-
+// #include "hashmap.h"
+// this header is auto generated
+#include "pointer/hashmap.h"
 
 int main(int argc, char* argv[]) {
     printf("C: Hello, world!\n");
-    Hashmap map = build_hashmap();
+    const void* map = build_hashmap();
     printf("C: hashmap: %p\n", map);
     // ask for a key while q is pressed
     char buffer[256];
@@ -33,7 +19,7 @@ int main(int argc, char* argv[]) {
         }
 
         int key = atoi(buffer);
-        Foo* foo = get_hashmap_value(map, key);
+        const Foo* foo = get_hashmap_value(map, key);
 
         if (foo == NULL) {
             printf("C: value is null\n");
