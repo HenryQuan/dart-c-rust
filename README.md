@@ -2,7 +2,7 @@
 This is an experiment on controlling a Rust raw pointer (e.g Hashmap) from C or Dart. The goal is to ask Rust to do some operations on the given pointer and return some data to another language using simple nested struct.
 
 # Code generation
-`cbindgen` and `ffigen` are used to generate the C header from Dart and Dart bindings from C. Run `mingw32-make.exe header` to generate everything before running `mingw32-make.exe all`.
+`cbindgen` and `ffigen` are used to generate the C header from Rust and Dart bindings from C. Run `mingw32-make.exe header` to generate everything before running `mingw32-make.exe all`.
 
 This can be done manually as seen in `hashmap.h`, but this won't be scalable in the long run. However, it is always good to experiment by writing the header and the binding manually first.
 
